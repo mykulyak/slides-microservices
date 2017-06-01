@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<head lang="pl">
+    <meta charset="UTF-8">
+    <meta name="author" content="Andriy Mykulyak"/>
+
+    <title>Mikrousługi</title>
+
+    <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css"/>
+    <link rel="stylesheet" href="node_modules/reveal.js/css/theme/black.css"/>
+
+    <script src="node_modules/reveal.js/js/reveal.js"></script>
+    <script src="index.js"></script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>Mikrousługi</h1>
+            <h4>Krótkie wprowadzenie do MSA</h4>
+            <img width="300px" height="300px"
+                 src="https://lh4.googleusercontent.com/7GNdYMej0QY7HVnj562ucTL_XIE_QLYi31x8G8efg6-M_jZ9sqJDj3gwUxJ2bq_y8O98yQBecVHumPlf4pmF_9i14UsyxuYHLWKdxQ57pqCGjrWfkE2ZW4cClpWoxopcdSdAVoX6"/>
+        </section>
+
+        <section>
+            <h2>Agenda</h2>
+            <ul>
+                <li>Czym są mikrousługi ?</li>
+                <li>Zalety i wady</li>
+                <li>Kiedy je potrzebujemy ?</li>
+                <li>Projektujemy</li>
+                <li>Dewelopment</li>
+                <li>Utrzymanie i administrowanie</li>
+                <li>Odnośniki</li>
+            </ul>
+        </section>
+
+        <section>
+            <section>
+                <h2>Czym są te mikrousługi ?</h2>
+
+                <p>
+                    Architektura oparta o mikrousługi (MSA) jest <em class="fragment highlight-blue">podejściem
+                    architektonicznym</em> do projektowania i rozwoju aplikacji jako zbioru
+                    <em class="fragment highlight-blue">małych</em>,
+                    <em class="fragment highlight-blue">modularnych</em> i
+                    <em class="fragment highlight-blue">niezależnych serwisów</em> w którym każdy serwis jest
+                    uruchamiany w osobnym procesie i komunikuje się z innymi serwisami za pomocą
+                    <em class="fragment highlight-blue">dobrze zdefiniowanych</em> i
+                    <em class="fragment highlight-blue">lekkich mechanizmów</em>.
+                </p>
+            </section>
+
+            <section>
+                <h2>Przykłady</h2>
+                <ul>
+                    <li>autoryzacja</li>
+                    <li>wysyłka maili</li>
+                    <li>dostęp do cache-a</li>
+                    <li>zarządzanie kontami klientów</li>
+                    <li>skalowanie obrazków</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Kiedy usługa jest "mikro" ?</h2>
+                <ul>
+                    <li>... kiedy może być wydewelopowany przez zespół "dwóch pizz" (6-8 osób)</li>
+                    <li>... kiedy ma mniej niż 5000 LOC</li>
+                    <li>... kiedy działa w obrębie pojedynczego kontekstu ograniczonego lub jego części</li>
+                </ul>
+
+                <a href="" target="_blank">Kontekst ograniczony</a> jest
+            </section>
+
+            <section>
+                <h2>Kiedy one się pojawiły ?</h2>
+
+                <p>Podejście jest stosunkowo młode</p>
+
+                <p>Pierwsze pomysły pojawiły się ok 2005 r.</p>
+
+                <p>Pierwsze duże zastosowanie - Netflix w 2008 r.</p>
+
+                <p>Termin <em class="fragment highlight-blue">mikrousługa</em> został zaproponowany w 2011 r.</p>
+
+                <p>W 2015 r. Amazon skończył przepisywać swoje aplikacje w oparciu o MSA</p>
+            </section>
+        </section>
+
+        <section>
+            <h2>Zalety</h2>
+
+            <ul>
+                <li class="fragment highlight-blue">możliwość niezależnego rozwoju serwisów</li>
+                <li class="fragment highlight-blue">mikroserwis może być stworzony przez stosunkową niewielki zespół
+                    (4-8 osób)
+                </li>
+                <li class="fragment highlight-blue">różne usługi mogą być napisane w różnych technologiach</li>
+                <li class="fragment highlight-blue">możliwość stopniowej zmiany technologii</li>
+                <li class="fragment highlight-blue">integracja oraz deployment są stosunkowo proste i automatyzowalne
+                </li>
+                <li class="fragment highlight-blue">modyfikacje są proste, wdrażanie nowych członków zespołów jest
+                    szybkie
+                </li>
+                <li class="fragment highlight-blue">usługi są organizowane wokół biznesowych możliwości (around biznes
+                    capabilities)
+                </li>
+                <li class="fragment highlight-blue">możliwość powtórnego redeployment-u poszczególnych mikroserwisów
+                </li>
+                <li class="fragment highlight-blue">lepsza izolacja błędów (nie wychodzi poza granicy serwisu)</li>
+                <li class="fragment highlight-blue">prostsza integracja z innymi produktami</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Wady</h2>
+
+            <ul>
+                <li class="fragment highlight-blue">testowanie rozproszonych usług może być trudne</li>
+                <li class="fragment highlight-blue">bariery informacyjne wynikające ze zbyt dużej liczby usług lub ich
+                    nieoptymalnym rozbiciem
+                </li>
+                <li class="fragment highlight-blue">nowe wyzwania dla dewelopera - błędami środowiska, błędami oraz
+                    opóźnieniami w sieci, balansowaniem obciążenia itd
+                </li>
+                <li class="fragment highlight-blue">deweloperzy muszą inwestować czas i wysiłek w implementację
+                    mechanizmów komunikacyjnych
+                </li>
+                <li class="fragment highlight-blue">realizacje przypadków użycia wymagających interakcji pomiędzy
+                    kilkoma serwisami wymaga komunikacji kilku zespołów
+                </li>
+                <li class="fragment highlight-blue">prawidłowy podział monolitycznej aplikacji na mikroserwisy jest
+                    trudny, poniekąd jest sztuką
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <section>
+                <h2>Projektujemy</h2>
+                <ul>
+                    <li>Wersjonowanie</li>
+                    <li>Komunikacja między usługami</li>
+                    <li>Częste szablony projektowania</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Semantyczne wersjonowanie</h2>
+                <ul>
+                    <li>
+                        Wersje mają postać <code>X.Y.Z</code> z opcjonalnym przyrostkiem np. <code>rc1</code>, <code>beta</code>
+                        itd.
+                    </li>
+                    <li>Zaczynamy od <code>0.1.0</code></li>
+                    <li>Wersje mniejsze niż <code>1.0.0</code> są uważane za deweloperskie (niezamrożone)</li>
+                    <li>Jeśli poprawiamy bugi, podbijamy <code>Z</code></li>
+                    <li>Jeśli wprowadzamy nowe funkcjonalności w sposób kompatybiilny, podnosimy <code>Y</code></li>
+                    <li>Jeśli wprowadzamy zmiany niekompatybilne, zwiększamy <code>X</code></li>
+                </ul>
+                <p>Więcej szczegółów na <a href="semver.org" target="_blank">semver.org</a></p>
+            </section>
+
+            <section>
+                <h2>Komunikacja pomiędzy serwisami</h2>
+
+                <p>Preferowane są lekkie protokoły, bez logiki w middleware-ach</p>
+
+                <p>Dodawanie logiki na poziomie protokołów stwarza niepotrzebne zależności</p>
+            </section>
+
+            <section>
+                <h2>Protokoły komunikacji</h2>
+
+                <p>Protokołem transportowym prawie zawsze jest HTTP</p>
+                <ul>
+                    <li>
+                        <span>REST</span>
+                        <ul>
+                            <li>JSON lub XML</li>
+                            <li>ProtoBuffer</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span>RPC</span>
+                        <ul>
+                            <li>SOAP</li>
+                            <li>ProtoBuffer</li>
+                            <li>Thrift</li>
+                            <li>GraphQL</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!--
+            Komunikacja - lekki protokol, bez zbytniej logiki. JSON @ HTTP jest prawie idealnym polaczeniem.
+
+            Jesli w kleju bedzie zawarta logika (np. transformacja komunikatow), stwarzamy zaleznosci. Teraz
+            serwis nie moze byc zaktualizowany bez zmiany middleware-ow.
+
+            HTTP ma kolejna zalete ze wiele koncepcji juz sa wbudowane w protokol
+
+            A w tym wszystkim chodzi o zmniejszenie ich liczby.
+
+            Znalezenie serwisow
+            -->
+
+            <!--
+            Cohesion i coupling.
+
+            Mikrousligi powinny miec wysoka spojnosc i slabe powiazanie.
+
+            Spojnosc - usluga sluzy do wykonywania jednego zadania.
+
+            Nanouslugi - antyszablon. Narzut na utrzymanie i zrozumienie calosci jest zbyt duzy.
+
+            Unikamy przedwczesnego rozbicia na serwisy. Zeby to zrobic dobrze trzeba dobrze zrozumiec
+            system. Inaczej to co zostalo rozbite wczesniej trzeba bedzie zlozyc z powrotem do kupy i
+            rozbi jeszcze raz - dosc kosztowny proces.
+
+            Unikamy wspoldzielonych baz danych. Jesli trzeba, duplikujemy dane.
+            -->
+        </section>
+
+        <section>
+            <section>
+                <h2>Dewelopment</h2>
+            </section>
+        </section>
+
+        <section>
+            <h2>Utrzymanie i administrowanie</h2>
+            <!--
+            Wersjonowanie.
+
+            Zespol deweloperski odpowiada za wdrozenie i utrzymanice serwisow - "wlada nimi", ale
+            rowniez ma moc decyzyjna jesli chodzi o wybor technologii, oraz sposobu realizacji zadan.
+
+            Swoboda i odpowiedzialnosc. Zespol ma swobode w realizacji zadan, ale tez odpowiada za
+            wyniki. Wyniki sa mierzalne.
+
+            Wieksze zespoly zazwyczaj "dewelopują" szybcieej niż małe.
+
+            Obowiązkowe jest CI/CD.
+
+            Automatyzować wszystko co się da. Zadania bieżące (deployment, monitoring, zapewnienie
+            dostępności - w trybie obowiązkowym).
+
+            Narzedzia:
+
+            - CI/CD
+            - zarzadzanie infrastruktura
+            - monitorowanie stanu i wydajnosci serwisow
+            - zapewnienie szybkiej sciezki komunikacji
+            -->
+        </section>
+
+        <section>
+            <section>
+                <h2>Odnośniki - mikrousługi</h2>
+                <ul>
+                    <li>
+                        <a href="http://ebookpoint.pl/ksiazki/budowanie-mikrouslug-sam-newman,budmik.htm"
+                           target="_blank">Budowanie mikrousług T.Newman</a>
+                    </li>
+                    <li>
+                        <a href="https://martinfowler.com/articles/microservices.html" target="_blank">Microservices -
+                            M.Fowler</a>
+                    </li>
+                    <li>
+                        <a href="https://www.fullstackpython.com/microservices.html" target="_blank">Microservices @
+                            Full Stack Python</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Mikrousługi w chmurach</h2>
+
+                <ul>
+                    <li>
+                        <a href="https://cloud.google.com/appengine/docs/standard/python/microservices-on-app-engine"
+                           target="_blank">Google App Engine</a>
+                    </li>
+                    <li>
+                        <a href="https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-overview-microservices"
+                           target="_blank">Microsoft Azure</a>
+                    </li>
+                    <li>
+                        AWS - <a href="https://jaxenter.com/building-microservices-application-on-aws-129890.html"
+                                 target="_blank">1</a>
+                    </li>
+                    <li>
+                        Heroku - <a
+                            href="https://stackoverflow.com/questions/41795612/how-to-deploy-microservices-on-heroku"
+                            target="_blank">1</a>, <a
+                            href="https://dzone.com/articles/exploring-microservices-architecture-on-heroku-1"
+                            target="_blank">2</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Domain Driven Design</h2>
+
+                <ul>
+                    <li>
+                        <a href="http://ebookpoint.pl/ksiazki/ddd-dla-architektow-oprogramowania-vaughn-vernon,dddaro.htm"
+                           target="_blank">DDD dla architektów oprogramowania - E.Evans</a>
+                    </li>
+                    <li>
+                        <a href="http://ebookpoint.pl/ksiazki/domain-driven-design-zapanuj-nad-zlozonym-systemem-informatycznym-eric-evans,domdri.htm"
+                           target="_blank">Domain-Driven Design. Zapanuj nad złożonym systemem informatycznym.</a>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Inne</h2>
+
+                <ul>
+                    <li>
+                        <a href="https://12factor.net/">12 factor app</a>
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <h2>Dziękuję ! :-)</h2>
+        </section>
+    </div>
+</div>
+</body>
+</html>

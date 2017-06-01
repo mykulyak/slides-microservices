@@ -1,0 +1,129 @@
+
+Zespol "w³adaj¹cy" mikrous³ugami jest kros-funkcyjny. On zapewnia rozwój, westowanie,
+wdro¿enie oraz monitoring serwisów.
+
+Mikrous³ugi dzia³aj¹ trochê tak jak narzêdzia w UNIX-ie.
+
+- Rób jedn¹ sprawê ale dobrze.
+- przyjmij coœ na wejœcie, przetwórz, wypluj na wyjœcie
+
+W MSA ka¿da mikrous³uga ma swoj¹ bazê danych.
+
+Mikrous³ugi s¹ projektowane przy za³o¿eniu ¿e œwiat nie jest idealny - sieæ, dysk, inne
+serwisy mog¹ nie dzia³aæ itd.
+
+Prawo Conway-a - "Organizacje produkuj¹ systemy których achitektura przypomina strukturê
+organizacyjn¹ organizacji".
+
+------------------
+
+Zalety i wady MSA:
+
+- mo¿liwoœæ niezale¿nego rozwoju serwisów
+- mikroserwis mo¿e byæ stworzony przez stosunkow¹ niewielki zespó³ (4-8 osób)
+- ró¿ne us³ugi mog¹ byæ napisane w ró¿nych technologiach, a co za tym idzie - mo¿na
+    stopniowo migrowaæ infrastrukturê
+- stosunkowo prosta integracja oraz automatyczny deployment (narzêdzia typu open source)
+- modyfikacje s¹ proste, wdra¿anie nowych cz³onków zespo³ów jest szybkie
+- us³ugi s¹ organizowane wokó³ biznesowych mo¿liwoœci (around biznes capabilities)
+- mo¿liwoœæ powtórnego redeployment-u poszczególnych mikroserwisów
+- lepsza izolacja b³êdów (nie wychodzi poza granicy serwisu)
+- prostsza integracja z innymi produktami
+- mo¿liwoœæ zmiany u¿ywanych technologii
+
+
+- testowanie rozproszonych us³ug mo¿e byæ trudne
+- bariery informacyjne wynikaj¹ce ze zbyt du¿ej liczby us³ug lub ich nieoptymalnym rozbiciem
+- deweloper musi radziæ sobie z nowymi wyzwaniami - b³êdami œrodowiska, b³êdami oraz opóŸnieniami
+    w sieci, balansowaniem obci¹¿enia itd.
+- deweloperzy musz¹ inwestowaæ czas i wysi³ek w implementacjê mechanizmów komunikacyjnych
+- realizacje przypadków u¿ycia wymagaj¹cych interakcji pomiêdzy kilkoma serwisami wymaga komunikacji
+    kilku zespo³ów
+- MSA zazwyczaj (ale nie zawsze) skutkuje zwiêkszeniem zu¿ycia pamiêci
+- prawid³owy podzia³ monolitycznej aplikacji na mikroserwisy jest trudny, poniek¹d sztuk¹
+
+-----------------
+
+Microservice architecture is a method of developing software applications as a suite of
+independently deployable, small, modular services in which each service runs a unique
+process and communicates through a well-defined, lightweight mechanism to serve a business goal.
+
+Architektura oparta o mikrous³ugi (MSA) jest podejœciem architektonicznym do projektowania i rozwoju
+aplikacji jako zbioru ma³ych, modularnych i niezale¿nych serwisów w którym ka¿dy serwis jest
+uruchamiany w osobnym procesie i komunikuje siê z innymi serwisami za pomoc¹ œciœle okreœlonego,
+lekkiego mechanizmu.
+
+MSA czêszo jest uwa¿ana za odmianê SOA, chocia¿ s¹ podstawowe ró¿nice.
+
+- SOA potrzebuje szynê wymiany danych (ESB), MSB - po³¹czenia p2p
+
+Dok³adny mechanizm komunikacji zmienia siê od serwisu do serwisu, ale najczêœciej stosowanymi
+technologiami s¹ HTTP jako protokó³ transportowy oraz JSON lub ProtoBuffer jako format
+wymiany danych. Równie¿ mo¿liwe jest stosowane technologii w stylu RPC, np. SOAP lub XML-RPC.
+
+Najlepiej porównaæ mikrous³ugi z aplikacj¹ monolityczn¹, która jest uruchamiana jako pojedynczy
+modu³. Najmniejsza zmiana w kodzie aplikacji wymaga ponownego zbudowania i wgrania ca³ej aplikacji.
+Podobna sytuacja jest ze skalowaniem - mo¿na skalowaæ ca³¹ aplikacjê, ale nie jej czêœci.
+
+Najwiêkszymi u¿ytkownikami MSB s¹ Amazon, Netflix, eBay, Gilt, Twitter itd.
+
+
+Projektowanie
+-------------
+
+1. komunikacja - wymagania
+2. protoko³y komunikacji
+    REST
+    RPC
+3. patterny
+    API gateway
+
+Notatki
+-------
+
+Mikroserwisy pozwalaj¹ podzieliæ du¿¹ aplikacjê na ma³e czêœci, ka¿da z których bêdzie mia³a
+swój dobrze okreœlony obszar odpowiedzialnoœci.
+
+Mo¿liwoœæ deployowania us³ug niezale¿nie od siebie wymaga ¿eby ka¿da us³uga œciœle definiowa³a
+i wersjonowa³a swoje API. Zarz¹dzanie wersjami jest podstaw¹ stabilnej infrastruktury i jednym
+z najwiêkszych wyzwañ dla organizacji.
+
+Osoby zainteresowane (deweloperzy, DevOps-y, PM-owie) powinny rozumieæ ró¿nicê pomiêdzy zmianami
+kompatyilnymi wstecz i tymi które nie s¹ kompatybilne. Terminy wiêkszych wdro¿eñ powinny byæ.
+znane deweloperom. Tak samo powinny wiedzieæ o momencie w którym mo¿na wycofaæ star¹ wersjê
+us³ugi. Deweloperzy powinny informowaæ o bliskim wycofaniu starej wersji, np. za pomoc¹ ostrze¿eñ.
+
+-
+
+Zalezy architektury opartej o mikroserwisy.
+
+- umozliwia wersjonowanie API poszczegolnych uslug (semantyczne wersjonowanie)
+- umo¿liwia niezale¿ne cykly releasów poszczególnych us³ug (wraz z mo¿liwoœciami rollback)
+- równoleg³e testowanie typu A/B podsystemów
+- minimalizacja narzutu spowodowanego testami oraz QA
+- zwiêkszenie przejrzystoœci logowania oraz monitoringu
+- dok³adniejsze oszacowanie kosztów
+- zwiêkszona skalowalnoœæ oraz dostêpnoœæ systemów
+
+Ka¿da chmura wspiera dewelopment oprogramowania w tym podejœciu, przede wszystkim dlatego
+¿e bierze na siebie zarz¹dzanie infrastruktur¹.
+
+Standardowy sposób komunikacji pomiêdzy serwisami to REST API. Ale protokó³ mo¿e byæ inny,
+byleby:
+
+- by³ lekki i "g³upi" (nie dodajemy logiki do middlewarów)
+- by³ otwarty (umo¿liwia szybkie napisanie bibliotek klienckich)
+- mia³ narzêdzia powi¹zane (np. do generowanie kodu)
+- pozwala³ na ró¿ne stopnie dok³adnoœci opisu API
+
+Jako przyk³ad - REST, lub RPC (SOAP, ProtoBuf, Thrift, GraphQL :-) )
+
+Zasada semantycznego wersjonowania
+
+X.Y.Z
+
+X - wprowadzamy niekompatybilne zmiany
+Y - nowa funkcjonalnosc kompatybilna wstecz
+Z - jesli naprawiamy bugi
+
+Startujemy od 0.1.0. Wszystkie wersje przed 1.0.0 sa deweloperskie ("niezamrozone" ze tak powiem).
